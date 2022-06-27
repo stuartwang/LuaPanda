@@ -2,6 +2,7 @@
 import * as vscode from 'vscode';
 import * as Net from 'net';
 import * as path from 'path';
+import { readFileSync } from 'fs';
 import { LuaDebugSession } from './debug/luaDebug';
 import { DebugLogger } from './common/logManager';
 import { StatusBarManager } from './common/statusBarManager';
@@ -32,6 +33,24 @@ export function activate(context: ExtensionContext) {
         vscode.window.showInformationMessage('Lua Garbage Collect!');
     });
     context.subscriptions.push(LuaGarbageCollect);
+
+    // appendLuaPandaContext 在光标位置追加代码
+    let appendLuaPandaContext = vscode.commands.registerCommand('luapanda.appendLuaPandaContext', function () {
+        // 读取文件
+        let luapandafilepath = path.resolve(__dirname, '../Debugger/LuaPanda.lua');
+        let luapandaContent = readFileSync(luapandafilepath , 'utf8');
+        // 写入文件内容
+        vscode.window.activeTextEditor.insertSnippet(new vscode.SnippetString(luapandaContent));
+    });
+    context.subscriptions.push(appendLuaPandaContext);
+
+    // appendLuaPandaRequire 在光标位置追加require
+    let appendLuaPandaRequire = vscode.commands.registerCommand('luapanda.appendLuaPandaRequire', function () {
+        vscode.window.activeTextEditor.insertSnippet(
+            new vscode.SnippetString(`require("LuaPanda").start()`)
+        );
+    });
+    context.subscriptions.push(appendLuaPandaRequire);
 
     let openSettingsPage = vscode.commands.registerCommand('luapanda.openSettingsPage', function () {
         //先尝试获取数据，如果数据获取失败，给错误提示。

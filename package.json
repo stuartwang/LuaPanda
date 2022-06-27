@@ -86,6 +86,14 @@
 			{
 				"command": "luapanda.openSettingsPage",
 				"title": "openSettingsPage"
+			},
+			{
+				"command": "luapanda.appendLuaPandaContext",
+				"title": "append LuaPanda Context"
+			},
+			{
+				"command": "luapanda.appendLuaPandaRequire",
+				"title": "append LuaPanda Require"
 			}
 		],
 		"configuration": {
